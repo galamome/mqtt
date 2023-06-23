@@ -2,7 +2,9 @@ import paho.mqtt.client as mqtt
 import time
 
 broker_hostname = "localhost"
-port = 1883 
+port = 1883
+topic = "Test"
+nbMessageToPost = 100
 
 def on_connect(client, userdata, flags, return_code):
     if return_code == 0:
@@ -17,11 +19,10 @@ client.on_connect=on_connect
 client.connect(broker_hostname, port)
 client.loop_start()
 
-topic = "Test"
-msg_count = 0
+msg_count = 50
 
 try:
-    while msg_count < 100:
+    while msg_count < nbMessageToPost:
         time.sleep(1)
         msg_count += 1
         result = client.publish(topic, msg_count)

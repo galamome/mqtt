@@ -1,30 +1,23 @@
-# rabbitmq_mqtt
 
-https://www.architect.io/blog/2021-01-19/rabbitmq-docker-tutorial/
+# Simple containerise application reading Mqtt and posting to a REST API
 
-## Build image with 
+Proof Of Concept of a containerised application, that reads a Mqtt topic, and posts the content of each message read to a REST API
 
-```bash
-docker build . --tag rabbitmq_mqtt -f Dockerfile
-```
-
-## Run
+## Build all container images
 
 ```bash
-docker run --rm -it \
-    -p 15672:15672 \
-    -p 5672:5672 \
-    -p 1883:1883 \
-    rabbitmq_mqtt
+docker-compose build
 ```
 
-Access the UI (`guest` / `guest`):
+## Launch system
 
- http://localhost:15672
+```bash
+docker-compose up -d
+```
 
- ## Launch producer
+## Launch producer
 
- ### Python 3.3+
+### Python 3.3+
 
 ```python
 python3 -m venv venv
@@ -41,3 +34,14 @@ source venv/bin/activate
 ```
 pip install -r requirements.txt
 ```
+
+### Launch producer script
+
+```bash
+python Producer.py
+```
+
+## Check the messages are reflected in the API
+
+Browse `http://localhost:88/swagger/index.html` (port corresponds to `docker-compose.yml`, part `readfrommqttapi`).
+

@@ -11,8 +11,83 @@ services:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
     networks:
-      - mosquitto
+      - mqtt
+    # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
+    logging:
+      options:
+        max-size: 10m
+  # ConsumeMqtt
+  consumemqtt:
+    container_name: consumemqtt
+    image: mqtt-test/consumemqtt
+    build:
+      context: ConsumeMqtt
+      dockerfile: ./Dockerfile
+      args:
+        # Versions of the Docker base images
+        - SDK_VERSION=6.0.407
+        - ALPINE_VERSION=alpine3.17
+        - ASPNET_VERSION=6.0.15
+        - PROJECT_NAME=ConsumeMqtt
+    # To make a standard input
+    #stdin_open: true
+    #tty: true
+    # Network
+    networks:
+      - mqtt
+    environment:
+      - READFROMMQTT_API_HOST_PORT=readfrommqttapi:8080
+      - READFROMMQTT_API_PROTOCOL=http
+      - MQTT_HOSTNAME=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_TOPIC_NAME=Test
+      # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
+    logging:
+      options:
+        max-size: 10m
+  # ReadFromMqtt API
+  readfrommqttapi:
+    container_name: readfrommqttapi
+    image: mqtt-test/readfrommqttapi
+    build:
+      context: ReadFromMqttAPI
+      dockerfile: ./Dockerfile
+      args:
+        # Versions of the Docker base images
+        - SDK_VERSION=6.0.407
+        - ALPINE_VERSION=alpine3.17
+        - ASPNET_VERSION=6.0.15
+        - PROJECT_NAME=ReadFromMqttAPI
+    environment:
+      - OTLP_URI=http://jaeger:4317
+      - CORS_ORIGIN=any
+    ports:
+      - 88:8080
+    networks:
+      - mqtt
+    # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
+    logging:
+      options:
+        max-size: 10m
+  # Jaeger all in one, to analyse telemetry at Open Telemetry Protocol
+  # You can then navigate to http://localhost:16686 to access the Jaeger UI.
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/opentelemetry-all-in-one
+    restart: unless-stopped
+    networks:
+    - mqtt
+    ports:
+    - 16686:16686
+    - 14269:14269
+    - 13133:13133
+    - 4317:4317
+    # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
+    logging:
+      options:
+        max-size: 10m
+
 networks:
-  mosquitto:
-    name: mosquitto
+  mqtt:
+    name: mqtt
     driver: bridge
