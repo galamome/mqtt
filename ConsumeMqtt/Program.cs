@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging.Console;
 var serviceProvider = new ServiceCollection()
     // Configure console logging
     .AddLogging(c => c.AddConsole(opt => opt.LogToStandardErrorThreshold = LogLevel.Debug))
-    .AddSingleton<IApiService, ApiService>()
+    .AddSingleton<IPersistService, FileWriterService>()
     .BuildServiceProvider();
 
 
@@ -19,13 +19,13 @@ var logger = serviceProvider.GetService<ILoggerFactory>()
     .CreateLogger<Program>();
 logger.LogDebug("Starting application");
 
-var _apiService = serviceProvider.GetService<IApiService>();
+var _apiService = serviceProvider.GetService<IPersistService>();
 
 Host.CreateDefaultBuilder()
     .ConfigureServices((context, services) =>
     {
         services
-            .AddSingleton<IApiService, ApiService>()
+            .AddSingleton<IPersistService, FileWriterService>()
             // Hosted service, that runs until the application is explicitly stopped
             .AddHostedService<MqttSubscribeService>();
     })

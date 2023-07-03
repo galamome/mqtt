@@ -7,9 +7,6 @@ using ReadFromMqttClient.Api;
 
 public static class MqttMessageHelper
 {
-    private const string READFROMMQTT_API_HOST_PORT = "READFROMMQTT_API_HOST_PORT";
-    private const string READFROMMQTT_API_PROTOCOL = "READFROMMQTT_API_PROTOCOL";
-
     //private readonly IReadFromMqttApi _readFromMqttApi;
 
     public static async Task HandleMessageAsync(MqttApplicationMessageReceivedEventArgs m)

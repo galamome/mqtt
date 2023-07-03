@@ -1,2 +1,4 @@
 # All virtual env for Python
 venv/
+mosquitto/data/mosquitto.db
+temp

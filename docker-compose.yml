@@ -35,12 +35,17 @@ services:
     # Network
     networks:
       - mqtt
+    volumes:
+      - ./temp:/tmp
     environment:
-      - READFROMMQTT_API_HOST_PORT=readfrommqttapi:8080
-      - READFROMMQTT_API_PROTOCOL=http
       - MQTT_HOSTNAME=mosquitto
       - MQTT_PORT=1883
-      - MQTT_TOPIC_NAME=Test
+      - MQTT_TOPIC_NAME=Measurement_tool
+      # To write message read from queue to a file (FileWriterService implementation of IPersistService)
+      - FILE_TO_WRITE=/tmp/Measurement_tool_messages.txt
+      # To post message read from queue to API (ApiService implementation of IPersistService)
+      #- READFROMMQTT_API_HOST_PORT=readfrommqttapi:8080
+      #- READFROMMQTT_API_PROTOCOL=http
       # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
     logging:
       options:
@@ -76,13 +81,13 @@ services:
     image: jaegertracing/opentelemetry-all-in-one
     restart: unless-stopped
     networks:
-    - mqtt
+      - mqtt
     ports:
-    - 16686:16686
-    - 14269:14269
-    - 13133:13133
-    - 4317:4317
-    # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
+      - 16686:16686
+      - 14269:14269
+      - 13133:13133
+      - 4317:4317
+      # To prevent the logs in '/var/lib/docker/containers/<container id>/<container id>-json.log' to grow indefinitly
     logging:
       options:
         max-size: 10m

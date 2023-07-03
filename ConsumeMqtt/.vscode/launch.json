@@ -13,7 +13,14 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "stopAtEntry": false
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "FILE_TO_WRITE": "/home/galamome/Temp/FromMqttQueue/FromMqttQueue.txt",
+                "MQTT_HOSTNAME": "localhost",
+                "MQTT_PORT": "1883",
+                "MQTT_TOPIC_NAME": "Measurement_tool"
+            }
         },
         {
             "name": ".NET Core Attach",
