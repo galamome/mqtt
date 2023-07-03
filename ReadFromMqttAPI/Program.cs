@@ -64,11 +64,13 @@ if (!String.IsNullOrEmpty(otlpUri))
             "Exponential");
 }
 
+// TODO : reactivate, but needs AzureAd configuration set in appsettings.json
+/*
 // Azure Active Directory authentication
 // Configuration comes from appsettings.json
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
+*/
 builder.Services.AddAuthorization();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

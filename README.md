@@ -1,19 +1,15 @@
 
-# Simple containerise application reading Mqtt and posting to a REST API
+# Simple containerized application reading Mqtt and posting to a REST API
 
-Proof Of Concept of a containerised application, that reads a Mqtt topic, and posts the content of each message read to a REST API
+Proof Of Concept of a containerised application, that reads a Mqtt topic, and persists the content of each message read :
 
-## Build all container images
-
-```bash
-docker-compose build
-```
-
-## Launch system
-
-```bash
-docker-compose up -d
-```
+- **either** to a REST API (`ApiService` implementation of `IPersistService`)
+  - environnement variable
+    - `READFROMMQTT_API_HOST_PORT` defines the hostname and the port hosting the API
+    - `READFROMMQTT_API_PROTOCOL` defines the protocol
+- **either** writing the content of each message read in a text file (`FileWriterService` implementation of `IPersistService`)
+  - environnement variable `FILE_TO_WRITE` defines the path of the file to write
+  - [exemple video](./Documentation/images/Persist_to_file.webm)
 
 ## Launch producer
 
@@ -34,14 +30,3 @@ source venv/bin/activate
 ```
 pip install -r requirements.txt
 ```
-
-### Launch producer script
-
-```bash
-python Producer.py
-```
-
-## Check the messages are reflected in the API
-
-Browse `http://localhost:88/swagger/index.html` (port corresponds to `docker-compose.yml`, part `readfrommqttapi`).
-

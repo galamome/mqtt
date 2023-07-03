@@ -13,24 +13,7 @@ using MQTTnet;
 
 namespace ConsumeMqtt.Service;
 
-public interface IApiService
-{
-    /// <summary>
-    /// Get the collection of all Records from the API
-    /// </summary>
-    /// <returns></returns>
-    public Task<ReadOnlyCollection<RecordDto>> GetAllAsync();
-
-    /// <summary>
-    /// POST a Record to the API
-    /// </summary>
-    /// <param name="m">MQTT message</param>
-    /// <returns></returns>
-    public Task CreateRecordAsync(MqttApplicationMessageReceivedEventArgs m);
-
-}
-
-public sealed class ApiService : IApiService
+public sealed class ApiService : IPersistService
 {
     private const string READFROMMQTT_API_HOST_PORT = "READFROMMQTT_API_HOST_PORT";
     private const string READFROMMQTT_API_PROTOCOL = "READFROMMQTT_API_PROTOCOL";
@@ -69,11 +52,13 @@ public sealed class ApiService : IApiService
     }
 
     /// <inheritdoc/>
+    /*
     public async Task<ReadOnlyCollection<RecordDto>> GetAllAsync()
     {
         var allRecs = await _readFromMqttApi.ReadFromMqttGetAllRecordsAsync();
         return allRecs.AsReadOnly();
     }
+    */
 
     /// <inheritdoc/>
     public async Task CreateRecordAsync(MqttApplicationMessageReceivedEventArgs m)

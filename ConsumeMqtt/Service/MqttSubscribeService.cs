@@ -8,13 +8,13 @@ namespace ConsumeMqtt.Service;
 internal sealed class MqttSubscribeService : IHostedService
 {
     private readonly ILogger<MqttSubscribeService> _logger;
-    private readonly IApiService _apiService;
+    private readonly IPersistService _persistService;
 
     public MqttSubscribeService(ILoggerFactory loggerFactory,
-                IApiService apiService)
+                IPersistService persistService)
     {
         _logger = loggerFactory.CreateLogger<MqttSubscribeService>();
-        _apiService = apiService;
+        _persistService = persistService;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ internal sealed class MqttSubscribeService : IHostedService
         mqttClient.ApplicationMessageReceivedAsync += async (m) =>
         {
             // What is executed on each message received
-            await _apiService.CreateRecordAsync(m);
+            await _persistService.CreateRecordAsync(m);
         };
 
         var suback = await mqttClient.SubscribeAsync(topicName);
