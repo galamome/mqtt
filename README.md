@@ -7,9 +7,19 @@ Proof Of Concept of a containerised application, that reads a Mqtt topic, and pe
   - environnement variable
     - `READFROMMQTT_API_HOST_PORT` defines the hostname and the port hosting the API
     - `READFROMMQTT_API_PROTOCOL` defines the protocol
+  - [video example](./Documentation/images/Subscribe_to_MQTT_post_to_API.webm)
 - **either** writing the content of each message read in a text file (`FileWriterService` implementation of `IPersistService`)
   - environnement variable `FILE_TO_WRITE` defines the path of the file to write
-  - [exemple video](./Documentation/images/Persist_to_file.webm)
+  - [video example](./Documentation/images/Persist_to_file.webm)
+
+> NOTICE: to change the persistence mode, just change which service is injected for implementation of `IPersistService` in file [ConsumeMqtt/Program.cs](./ConsumeMqtt/Program.cs)
+
+```csharp
+    // Persist to file
+    .AddSingleton<IPersistService, FileWriterService>()
+    // Persist to API
+    //.AddSingleton<IPersistService, ApiService>()
+```
 
 ## Launch producer
 

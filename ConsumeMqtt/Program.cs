@@ -25,7 +25,10 @@ Host.CreateDefaultBuilder()
     .ConfigureServices((context, services) =>
     {
         services
+            // Persist to file
             .AddSingleton<IPersistService, FileWriterService>()
+            // Persist to API
+            //.AddSingleton<IPersistService, ApiService>()
             // Hosted service, that runs until the application is explicitly stopped
             .AddHostedService<MqttSubscribeService>();
     })
